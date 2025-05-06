@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication App - Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    nav {
+      margin-bottom: 20px;
+    }
+    nav a {
+      margin-right: 10px;
+      text-decoration: none;
+      color: #007bff;
+    }
+    .profile-card {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    .profile-info {
+      margin-bottom: 15px;
+    }
+    .profile-label {
+      font-weight: bold;
+      display: inline-block;
+      width: 100px;
+    }
+    button {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <h1>Your Profile</h1>
+  
+  <nav>
+    <a href="/">Home</a>
+    <a href="/profile">Profile</a>
+    <a href="/logout">Logout</a>
+  </nav>
+  
+  <div class="profile-card">
+    <h2>Profile Information</h2>
+    
+    <div class="profile-info">
+      <span class="profile-label">Username:</span>
+      <span id="username">Loading...</span>
+    </div>
+    
+    <div class="profile-info">
+      <span class="profile-label">Email:</span>
+      <span id="email">Loading...</span>
+    </div>
+    
+    <button id="logout-btn">Logout</button>
+  </div>
+
+  <script>
+    // Fetch user profile data
+    fetch('/api/user')
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        // If not authenticated, redirect to home page
+        window.location.href = '/';
+        throw new Error('Not authenticated');
+      })
+      .then(user => {
+        document.getElementById('username').textContent = user.username;
+        document.getElementById('email').textContent = user.email;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    
+    // Handle logout button
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      window.location.href = '/logout';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authentication App - Home</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    nav {
+      margin-bottom: 20px;
+    }
+    nav a {
+      margin-right: 10px;
+      text-decoration: none;
+      color: #007bff;
+    }
+    .welcome-message {
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Authentication App</h1>
+  
+  <nav>
+    <a href="/">Home</a>
+    <span id="auth-links">
+      <a href="/register">Register</a>
+      <a href="/login">Login</a>
+    </span>
+    <span id="user-links" style="display: none;">
+      <a href="/profile">Profile</a>
+      <a href="/logout">Logout</a>
+    </span>
+  </nav>
+  
+  <div class="welcome-message">
+    <h2>Welcome to the Authentication App</h2>
+    <p id="guest-message">Please register or login to continue.</p>
+    <p id="user-message" style="display: none;">Welcome back, <span id="username"></span>!</p>
+  </div>
+
+  <script>
+    // Check if user is logged in
+    fetch('/api/user')
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error('Not authenticated');
+      })
+      .then(user => {
+        // User is authenticated
+        document.getElementById('auth-links').style.display = 'none';
+        document.getElementById('user-links').style.display = 'inline';
+        document.getElementById('guest-message').style.display = 'none';
+        document.getElementById('user-message').style.display = 'block';
+        document.getElementById('username').textContent = user.username;
+      })
+      .catch(error => {
+        // User is not authenticated
+        console.log('Not logged in');
+      });
+  </script>
+</body>
+</html>
